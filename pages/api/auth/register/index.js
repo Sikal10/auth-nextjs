@@ -1,6 +1,6 @@
 import User from "../../../../models/userModel";
 import {signActivationToken} from "../../../../utils/tokens";
-import {hashPasswordHandler} from "../../../../utils/validate";
+import {hashPasswordHandler, validateUserData} from "../../../../utils/validate";
 import sendEmail from "../../../../utils/sendEmail";
 import connectDB from "../../../../db/connectDB";
 
@@ -11,13 +11,11 @@ const handler = async (req, res) => {
 
     const {name, email, password} = req.body;
 
-    if (!name || !email || !password) {
-       return res.status(404).json({message: "Please enter all fields."})
-    }
+    validateUserData(name, email, password, res);
 
     const existingUser = await User.findOne({email});
     if (existingUser) {
-        return res.status(404).json({message: "User already exists."})
+        return res.status(404).json({message: "User already exists."});
     }
 
     const hashedPassword = await hashPasswordHandler(password);
