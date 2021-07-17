@@ -16,12 +16,12 @@ const handler = async (req, res) => {
         const user = await User.findOne({email});
         if (!user) return res.status(400).json({message: `user with the email ${email} does not exist.`});
 
-        const isPasswordValid = await isMatchPassword(password, user);
-        if (!isPasswordValid) return res.status(400).json({message: "Password is not valid. Please try again."});
+        //check if the unhashed password matches the password stored in the database
+        const isPasswordValid = password === user.password;
+        if (!isPasswordValid) return res.status(400).json({message: "Password is not valid. Please try again!"});
 
         const accessToken = await signAccessToken(user._id);
         const refreshToken = await signRefreshToken(user._id);
-        console.log(user);
 
         res.status(200).json({success: true, user: {accessToken, refreshToken}});
     } catch (err) {
