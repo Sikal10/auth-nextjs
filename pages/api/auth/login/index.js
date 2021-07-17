@@ -3,9 +3,9 @@ import User from "../../../../models/userModel";
 import {isMatchPassword, validateLoginUser} from "../../../../utils/validate";
 import {signAccessToken, signRefreshToken} from "../../../../utils/tokens";
 
-connectDB();
-
 const handler = async (req, res) => {
+    await connectDB();
+
     if (req.method !== "POST") return res.status(404).json({message: `Method ${req.method} not allowed.`});
 
     try {
@@ -16,8 +16,7 @@ const handler = async (req, res) => {
         const user = await User.findOne({email});
         if (!user) return res.status(400).json({message: `user with the email ${email} does not exist.`});
 
-        //check if the unhashed password matches the password stored in the database
-        const isPasswordValid = password === user.password;
+        const isPasswordValid = await isMatchPassword(password, user);
         if (!isPasswordValid) return res.status(400).json({message: "Password is not valid. Please try again!"});
 
         const accessToken = await signAccessToken(user._id);
