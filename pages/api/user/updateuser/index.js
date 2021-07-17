@@ -10,6 +10,7 @@ const handler = async (req, res) => {
     const {name, oldPassword, newPassword} = req.body;
     validateUpdateUser(name, oldPassword, newPassword, res);
 
+
     try {
         const user = await User.findById(authUser._id);
         if (!user) return res.status(500).json({message: "There is no such user."});
