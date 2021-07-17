@@ -17,3 +17,9 @@ export const validateUserData = (name, email, password, res) => {
 export const validateLoginUser = (email, password, res) => {
     if (!email || !password) return res.status(400).json({message: "Please enter all fields."})
 }
+
+export const validateUpdateUser = (name, oldPassword, newPassword, res) => {
+    if (!name && !oldPassword && !newPassword) {
+        return res.status(400).json({message: "You cannot submit empty fields."})
+    }
+}
