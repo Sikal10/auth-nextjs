@@ -22,7 +22,7 @@ const handler = async (req, res) => {
         const accessToken = await signAccessToken(user._id);
         const refreshToken = await signRefreshToken(user._id);
 
-        res.status(200).json({success: true, user: {accessToken, refreshToken}});
+        res.status(200).json({user: {accessToken, refreshToken}, message: "Logged in successfully."});
     } catch (err) {
         return res.status(500).json({message: err.message});
     }

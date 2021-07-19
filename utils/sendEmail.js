@@ -2,11 +2,11 @@ import mailgun from "mailgun-js";
 
 const mg = mailgun({apiKey: process.env.API_KEY, domain: process.env.DOMAIN});
 
-const sendMail = async (res, from, to, subject, activationUrl) => {
+const sendMail = async (res, from, to, subject, activationUrl, message) => {
     const html = `
       <div style="padding: 50px 20px; max-width: 700px; margin: auto; border: 10px solid lightgrey;">
       <h2 style="text-align: center;text-transform: uppercase;color: teal; margin-bottom: 2rem;">Welcome</h2>
-      <p>Congratulations! You are almost set. Click on the button below to activate your account.</p>
+      <p>Congratulations! You are almost set. Click on the button below to ${message}.</p>
       <a style="  color: white; background: crimson; padding: 10px 20px;margin: 10px;" href=${activationUrl}>Verify your email addres</a>
       <p>If the button doesn't work for any reason, you can click the link below:</p>
       <div>${activationUrl}</div>

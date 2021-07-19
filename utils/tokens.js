@@ -23,3 +23,11 @@ export const signRefreshToken = async (userId) => {
 export const verifyRefreshToken = async (refreshToken) => {
     return jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY)
 }
+
+export const signPasswordResetToken = async (userId) => {
+    return jwt.sign({id: userId}, process.env.PASSWORD_RESET_TOKEN_KEY, {expiresIn: process.env.PASSWORD_RESET_TOKEN_EXPIRY});
+}
+
+export const verifyPasswordResetToken = async (resetToken) => {
+    return jwt.verify(resetToken, process.env.PASSWORD_RESET_TOKEN_KEY);
+}

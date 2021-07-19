@@ -13,7 +13,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please enter a password."],
         min: 6
-    }
+    },
+    passwordResetToken: String
 
 }, {timestamps: true});
 

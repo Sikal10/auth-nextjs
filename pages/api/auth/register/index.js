@@ -4,9 +4,8 @@ import {hashPasswordHandler, validateUserData} from "../../../../utils/validate"
 import sendEmail from "../../../../utils/sendEmail";
 import connectDB from "../../../../db/connectDB";
 
-connectDB();
-
 const handler = async (req, res) => {
+    await connectDB();
     if (req.method !== "POST") return res.status(404).json({message: `Method ${req.method} is not allowed.`});
 
     const {name, email, password} = req.body;
@@ -15,7 +14,7 @@ const handler = async (req, res) => {
 
     const existingUser = await User.findOne({email});
     if (existingUser) {
-        return res.status(404).json({message: "User already exists."});
+        return res.status(404).json({message: `User with email ${email} already exists.`});
     }
 
     const hashedPassword = await hashPasswordHandler(password);
@@ -24,7 +23,8 @@ const handler = async (req, res) => {
     const activationToken = await signActivationToken(user);
 
     const activationUrl = `${process.env.CLIENT_URL}/auth/verifyemail/${activationToken}`;
-    await sendEmail(res, "noreply@gmail.com", email, "Email Verification", activationUrl)
+    const message = "activate your account"
+    await sendEmail(res, "noreply@gmail.com", email, "Email Verification", activationUrl, message)
 
     res.status(200).json({message: "Registration successful. Please activate your email to continue."});
 }

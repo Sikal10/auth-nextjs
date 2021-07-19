@@ -2,9 +2,9 @@ import {verifyActivationToken} from "../../../../utils/tokens";
 import connectDB from "../../../../db/connectDB";
 import User from "../../../../models/userModel";
 
-connectDB();
-
 const handler = async (req, res) => {
+    await connectDB();
+
     if (req.method !== "POST") return res.status(400).json({message: `Method ${req.method} is not allowed.`})
 
     const {activationToken} = req.body;
